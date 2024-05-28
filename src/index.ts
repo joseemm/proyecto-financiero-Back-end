@@ -1,44 +1,36 @@
 import express, { Request, Response } from 'express';
-import usuarioRoutes from './api/routes/usuario.routes'; // Asegúrate de que la ruta sea correcta
-import transaccionRoutes from './api/routes/transaccion.routes'; // Ajusta la ruta según tu estructura de proyecto
-import reporteRoutes from './api/routes/reporte.routes'; // Ajusta la ruta según tu estructura de proyecto
-import presupuestoRoutes from './api/routes/presupuesto.routes'; // Ajusta la ruta según tu estructura de proyecto
-import cuentasRoutes from './api/routes/Cuentas.routes'; // Ajusta la ruta según tu estructura de proyecto
-import categoriasRoutes from './api/routes/CategoriasPersonalizadas.routes'; // Ajusta la ruta según tu estructura de proyecto
-import alertasRoutes from './api/routes/Alertas.routes'; // Ajusta la ruta según tu estructura de proyecto
-import { verificarToken, checkJwt } from './api/middlewares/autenticacion.middleware'; // Asegúrate de que la ruta sea correcta
+import path from 'path';
+import usuarioRoutes from './api/routes/usuario.routes';
+import transaccionRoutes from './api/routes/transaccion.routes';
+import reporteRoutes from './api/routes/reporte.routes';
+import presupuestoRoutes from './api/routes/presupuesto.routes';
+import cuentasRoutes from './api/routes/Cuentas.routes';
+import categoriasRoutes from './api/routes/CategoriasPersonalizadas.routes';
+import alertasRoutes from './api/routes/Alertas.routes';
 
-
-// Crea una nueva aplicación de Express
 const app = express();
+const PORT = 3000;
 
 // Middleware para parsear el cuerpo de las peticiones
 app.use(express.json());
 
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, '../src/public')));
 
-
-// Define una ruta GET en la raíz
+// Define una ruta GET en la raíz para servir el archivo index.html
 app.get('/', (req: Request, res: Response) => {
-  res.send('¡Hola Mundo con TypeScript!');
+  res.sendFile(path.join(__dirname, '../src/public', 'index.html'));
 });
 
 // Usa las rutas de usuario
 app.use('/usuarios', usuarioRoutes);
-
 app.use('/api/transacciones', transaccionRoutes);
-
 app.use('/api/reportes', reporteRoutes);
-
 app.use('/api/presupuestos', presupuestoRoutes);
-
 app.use('/api/cuentas', cuentasRoutes);
-
 app.use('/api/categorias', categoriasRoutes);
-
 app.use('/api/alertas', alertasRoutes);
 
-// Inicia el servidor en el puerto 3000
-const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Servidor ejecutándose en http://localhost:${PORT}`);
 });
